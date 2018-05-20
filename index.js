@@ -53,23 +53,12 @@ const JsonReporter = function (baseReporterDecorator, config, logger, helper, fo
 		testSuite.hostname = os.hostname();
 		testSuite.testCases = [];
 
-		// const suite = suites[browser.id] = builder.create('testsuite');
-		// suite.att('name', browser.name)
-		// 	.att('package', pkgName)
-		// 	.att('timestamp', timestamp)
-		// 	.att('id', 0)
-		// 	.att('hostname', os.hostname());
-
-		// const propertiesElement = suite.ele('properties');
-		// propertiesElement.ele('property', {name: 'browser.fullName', value: browser.fullName});
-
 		const testSuiteProperties = testSuite.properties = {'browser.fullName': browser.fullName};
 
 		// add additional properties passed in through the config
 		for (const property in properties) {
 			if (properties.hasOwnProperty(property)) {
 				testSuiteProperties[property] = properties[property];
-				// propertiesElement.ele('property', {name: property, value: properties[property]})
 			}
 		}
 	};
@@ -96,7 +85,7 @@ const JsonReporter = function (baseReporterDecorator, config, logger, helper, fo
 
 		pendingFileWritings++;
 		helper.mkdirIfNotExists(path.dirname(newOutputFile), function () {
-			fs.writeFile(newOutputFile, jsonToOutput.end({pretty: true}), function (err) {
+			fs.writeFile(newOutputFile, JSON.stringify(jsonToOutput, null, 4), function (err) {
 				if (err) {
 					log.warn('Cannot write JSON\n\t' + err.message)
 				} else {
@@ -143,15 +132,6 @@ const JsonReporter = function (baseReporterDecorator, config, logger, helper, fo
 		testSuite.systemOut = allMessages.join() + '\n';
 		testSuite.systemErr = allMessages.join() + '\n';
 
-
-		// suite.att('tests', result.total ? result.total : 0);
-		// suite.att('errors', result.disconnected || result.error ? 1 : 0);
-		// suite.att('failures', result.failed ? result.failed : 0);
-		// suite.att('time', (result.netTime || 0) / 1000);
-		//
-		// suite.ele('system-out').dat(allMessages.join() + '\n');
-		// suite.ele('system-err');
-
 		writeJSONForBrowser(browser);
 
 		// Release memory held by the test suite.
@@ -166,7 +146,7 @@ const JsonReporter = function (baseReporterDecorator, config, logger, helper, fo
 	this.specSuccess = this.specSkipped = this.specFailure = function (browser, result) {
 		const testSuite = suites[browser.id].testSuite;
 
-		if (!testsuite) {
+		if (!testSuite) {
 			return
 		}
 		const spec = {
@@ -175,15 +155,7 @@ const JsonReporter = function (baseReporterDecorator, config, logger, helper, fo
 			className: (typeof classNameFormatter === 'function' ? classNameFormatter : getClassName)(browser, result)
 		};
 
-
-		// const spec = testsuite.ele('testcase', {
-		// 	name: nameFormatter(browser, result),
-		// 	time: ((result.time || 0) / 1000),
-		// 	classname: (typeof classNameFormatter === 'function' ? classNameFormatter : getClassName)(browser, result)
-		// });
-
 		if (result.skipped) {
-			// spec.ele('skipped')
 			spec.skipped = true;
 		}
 
@@ -192,7 +164,6 @@ const JsonReporter = function (baseReporterDecorator, config, logger, helper, fo
 
 			result.log.forEach(function (err) {
 				spec.failures.push({error: formatError(err)});
-				// spec.ele('failure', {type: ''}, formatError(err))
 			})
 		}
 		testSuite.testCases.push(spec);
