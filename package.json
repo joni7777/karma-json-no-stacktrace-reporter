@@ -1,0 +1,40 @@
+{
+	"name": "karma-json-no-stacktrace-reporter",
+	"version": "0.0.1",
+	"description": "A Karma plugin. Report results in json format without stacktrace.",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/joni7777/karma-json-no-stacktrace-reporter.git"
+	},
+	"keywords": [
+		"Karma",
+		"karma-plugin",
+		"karma-reporter",
+		"Plugin",
+		"Reportet",
+		"JSON",
+		"Stacktrace",
+		"Stack",
+		"Trace"
+	],
+	"author": {
+		"name": "Jonathan Erel",
+		"email": "joni7777@gmail.com"
+	},
+	"peerDependencies": {
+		"karma": ">=0.9"
+	},
+	"deprecated": false,
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/joni7777/karma-json-no-stacktrace-reporter/issues"
+	},
+	"homepage": "https://github.com/joni7777/karma-json-no-stacktrace-reporter#readme",
+	"dependencies": {
+		"path-is-absolute": "^1.0.1"
+	}
+}
